@@ -19,16 +19,16 @@ public:
     Matrix(int r, int c, std::vector<std::vector<double>> data);
 
     // Transpose method that returns a new transposed matrix
-    Matrix transposed() const;
+    Matrix transposed();
 
     // Matrix multiplication operator
-    Matrix operator*(const Matrix m1, const Matrix m2);
+    Matrix operator*(Matrix m2);
 
-    // Access operator for reading (const)
-    const std::vector<double>& operator[](size_t index) const;
-
-    // Access operator for writing (non-const)
+    // Non-const version (allows modification)
     std::vector<double>& operator[](size_t index);
+
+
+    friend std::ostream& operator<<(std::ostream& os, Matrix& matrix);
 
 private:
     std::vector<std::vector<double>> matrix;

@@ -17,66 +17,64 @@ double dot_product(std::vector<double> v1, std::vector<double> v2) {
 }
 
 
-class Matrix{
-public:
-    int rows;
-    int columns;
-
-    Matrix(int r, int c, std::vector<std::vector<double>> data) {
-        // These checks could be omitted for performance
-        if (data.size() != r) {
-            throw std::invalid_argument("Dimensions of the data passed in don't match dimensions passed"); 
+Matrix::Matrix(int r, int c, std::vector<std::vector<double>> data) {
+    // These checks could be omitted for performance
+    if (data.size() != r) {
+        throw std::invalid_argument("Matrix :: Dimensions of the data passed in don't match dimensions passed"); 
+    } 
+    for (std::vector<double> row: data) {
+        if (row.size() != c) {
+            throw std::invalid_argument("Matrix :: Dimensions of the data passed in don't match dimensions passed"); 
         } 
-        for (std::vector<double> row: data) {
-            if (row.size() != r) {
-                throw std::invalid_argument("Dimensions of the data passed in don't match dimensions passed"); 
-            } 
-        }
-        rows = r;
-        columns = c;
-        matrix = data;
+    }
+    rows = r;
+    columns = c;
+    matrix = data;
 
-        // read
-        int operator[](size_t index) const {
-            return matrix[index];
-        }
+}    
 
-        // For writing
-        int& operator[](size_t index) {
-            return matrix[index];
-        }
-    }    
-    // Returns a transposed copy but doesn't transpose the matrix itself
-    Matrix Matrix::transposed() const {
-        std::vector<std::vector<double>> transposed_matrix(columns, std::vector<double>(rows));
+// Non-const version
+std::vector<double>& Matrix::operator[](size_t index) {
+    return matrix[index];  // this->is fine, because matrix is non-const here
+}
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; i < columns; j++) {
-                transposed_matrix[j][i] = data[i][j];
-            }
-        }
-        return transposed_matrix;
-    };
 
-    // matrix multiplication
-    Matrix operator*(const Matrix m1, const Matrix m2)
-    {
-        if (m1.rows != m2.columns) {
-            std::osstringstream error_message << "cannot do matrix multiplication with matrix of "
-                                              << m1.rows << " rows and matrix of " << m2.columns << " columns" << std::endl;
-            throw std::invalid_argument(error_message.str());
-        }
+// Returns a transposed copy but doesn't transpose the matrix itself
+Matrix Matrix::transposed() {
+    std::vector<std::vector<double>> transposed_matrix(columns, std::vector<double>(rows));
 
-        Matrix m2_transposed = m2.transposed();
-        std::vector<std::vector<double>> matrix_data(m1.rows, std::vector<double>(m1.columns));
-        for (int i; i < m1.rows; i++) {
-            for (int j; j < m2.colums; j++) {
-                matrix_data[i][j] = dot_product(m1[i], m2[j]);
-            }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; i < columns; j++) {
+            transposed_matrix[j][i] = this->matrix[i][j];
         }
-        return Matrix(m1.rows, m2.columns, matrix_data);
+    }
+    Matrix transposed_m(this->rows, this->columns, transposed_matrix);
+    return transposed_m;
+};
+
+// matrix multiplication
+Matrix Matrix::operator*(Matrix m2)
+{
+    if (this->rows != m2.columns) {
+        throw std::invalid_argument("Invalid dimensions for matrix multiplication");
     }
 
-private:
-    std::vector<std::vector<double>> matrix;
-};
+    Matrix m2_transposed = m2.transposed();
+    std::vector<std::vector<double>> matrix_data(this->rows, std::vector<double>(this->columns));
+    for (int i; i < this->rows; i++) {
+        for (int j; j < m2.columns; j++) {
+            matrix_data[i][j] = dot_product((*this)[i], m2[j]);
+        } 
+    }
+    return Matrix(this->rows, m2.columns, matrix_data);
+}
+
+std::ostream& operator<<(std::ostream& os, Matrix& matrix) {
+    for (const auto& row : matrix.matrix) {
+        for (double val : row) {
+            os << val << " ";
+        }
+        os << "\n";
+    }
+    return os;
+}
