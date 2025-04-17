@@ -20,8 +20,6 @@ class Matrix{
 public:
     int rows;
     int columns;
-private:
-    std::vector<std::vector<double>> matrix;
 
     Matrix(int r, int c, std::vector<std::vector<double>> data) {
         // These checks could be omitted for performance
@@ -49,4 +47,6 @@ private:
 
 
     }    
+private:
+    std::vector<std::vector<double>> matrix;
 };
