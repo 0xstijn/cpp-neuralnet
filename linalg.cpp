@@ -24,7 +24,7 @@ Matrix::Matrix(int r, int c, std::vector<std::vector<double>> data) {
     } 
     for (std::vector<double> row: data) {
         if (row.size() != c) {
-            throw std::invalid_argument("Matrix :: Dimensions of the data passed in don't match dimensions passed"); 
+            throw std::invalid_argument("Matrix :: Dimensions of the data passed in don't match dimensions passed columns"); 
         } 
     }
     rows = r;
@@ -44,29 +44,32 @@ Matrix Matrix::transposed() {
     std::vector<std::vector<double>> transposed_matrix(columns, std::vector<double>(rows));
 
     for (int i = 0; i < rows; i++) {
-        for (int j = 0; i < columns; j++) {
+        for (int j = 0; j < columns; j++) {
             transposed_matrix[j][i] = this->matrix[i][j];
         }
     }
-    Matrix transposed_m(this->rows, this->columns, transposed_matrix);
+    Matrix transposed_m(this->columns, this->rows, transposed_matrix);
     return transposed_m;
 };
 
 // matrix multiplication
 Matrix Matrix::operator*(Matrix m2)
 {
-    if (this->rows != m2.columns) {
+    if (this->columns != m2.rows) {
         throw std::invalid_argument("Invalid dimensions for matrix multiplication");
     }
 
     Matrix m2_transposed = m2.transposed();
-    std::vector<std::vector<double>> matrix_data(this->rows, std::vector<double>(this->columns));
-    for (int i; i < this->rows; i++) {
-        for (int j; j < m2.columns; j++) {
-            matrix_data[i][j] = dot_product((*this)[i], m2[j]);
+    std::vector<std::vector<double>> matrix_data(this->rows, std::vector<double>(m2_transposed.rows));
+    for (int i = 0; i < this->rows; i++) {
+        for (int j = 0; j < m2_transposed.rows; j++) {
+            matrix_data[i][j] = dot_product((*this)[i], m2_transposed[j]);
         } 
     }
-    return Matrix(this->rows, m2.columns, matrix_data);
+
+    std::cout << this->columns << m2.rows << std::endl;    
+    Matrix output = Matrix(this->rows, m2.columns, matrix_data);
+    return output;
 }
 
 std::ostream& operator<<(std::ostream& os, Matrix& matrix) {
