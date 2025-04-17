@@ -4,7 +4,7 @@
 #include <vector>
 #include "linalg.h"
 
-double dot_product(std::vector<double> v1, std::vector<double>) {
+double dot_product(std::vector<double> v1, std::vector<double> v2) {
     if (v1.size() != v2.size()) {
         throw std::invalid_argument("Can only calculate dot product of vectors of same size");
     }
@@ -38,12 +38,12 @@ public:
 
         // read
         int operator[](size_t index) const {
-            return data[index];
+            return matrix[index];
         }
 
         // For writing
         int& operator[](size_t index) {
-            return data[index];
+            return matrix[index];
         }
     }    
     // Returns a transposed copy but doesn't transpose the matrix itself
