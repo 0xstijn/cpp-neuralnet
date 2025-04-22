@@ -59,10 +59,11 @@ Matrix Matrix::operator+(Matrix m2){
     std::vector<std::vector<double>> matrix_result(this->rows, std::vector<double>(m2.rows));
     for (int i = 0; i < this->rows; i++) {
         for (int j = 0; j < m2.rows; j++) {
-            matrix_result[i][j] = this->[i][j] + m2[i][j];
+            matrix_result[i][j] = this->matrix[i][j] + m2[i][j];
         } 
     }
-
+    Matrix result_matrix_object =  Matrix(this->rows, this->columns, matrix_result);
+    return result_matrix_object;
 
 };
 
@@ -83,7 +84,8 @@ Matrix Hadamard(Matrix m1, Matrix m2){
         }
     }
 
-
+    Matrix result_matrix = Matrix(m1.rows, m1.columns, result);
+    return result_matrix;
 }
 
 // matrix multiplication
