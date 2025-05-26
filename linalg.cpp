@@ -67,7 +67,7 @@ Matrix Matrix::operator+(Matrix m2){
 
 };
 
-Matrix Hadamard(Matrix m1, Matrix m2){
+Matrix Matrix::hadamard(Matrix m1, Matrix m2){
     if(m1.columns != m2.columns){
         throw std::invalid_argument("Dimensoins in columns don't match!");
     };
@@ -107,7 +107,6 @@ Matrix Matrix::operator*(Matrix m2)
     Matrix output = Matrix(this->rows, m2.columns, matrix_data);
     return output;
 }
-
 
 
 std::ostream& operator<<(std::ostream& os, Matrix& matrix) {

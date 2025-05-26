@@ -28,7 +28,7 @@ public:
     Matrix operator+(Matrix m2);
 
 
-    Matrix Hadamard(Matrix m1, Matrix m2);
+    Matrix hadamard(Matrix m1, Matrix m2);
     
     // Non-const version (allows modification)
     std::vector<double>& operator[](size_t index);

@@ -27,5 +27,15 @@ int main() {
     cout << "  " << m3 << "    " << endl;
 
     cout << m1[1][1];
+
+
+    vector<vector<double>> m4_data = {
+        {1, 2},
+        {4, 4}
+    }; 
+
+    Matrix m3 = Matrix(2, 2, m4_data);
+
+
     return 0;
 }
