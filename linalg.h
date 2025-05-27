@@ -9,6 +9,7 @@
 // Function to calculate dot product of two vectors
 double dot_product(std::vector<double> v1, std::vector<double> v2);
 
+
 // Matrix class
 class Matrix {
 public:
@@ -24,20 +25,22 @@ public:
     // Matrix multiplication operator
     Matrix operator*(Matrix m2);
 
+    // matrix mult for matrix * vector
+    std::vector<double> operator*(std::vector<double> vec);
+
     // Matrix addition
     Matrix operator+(Matrix m2);
 
-
-    Matrix hadamard(Matrix m1, Matrix m2);
-    
     // Non-const version (allows modification)
     std::vector<double>& operator[](size_t index);
 
 
-    friend std::ostream& operator<<(std::ostream& os, Matrix& matrix);
+    friend std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
 
 private:
     std::vector<std::vector<double>> matrix;
 };
+
+Matrix hadamard(Matrix m1, Matrix m2);
 
 #endif // LINALG_H

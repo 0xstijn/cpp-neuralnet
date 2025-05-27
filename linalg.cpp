@@ -67,7 +67,7 @@ Matrix Matrix::operator+(Matrix m2){
 
 };
 
-Matrix Matrix::hadamard(Matrix m1, Matrix m2){
+Matrix hadamard(Matrix m1, Matrix m2){
     if(m1.columns != m2.columns){
         throw std::invalid_argument("Dimensoins in columns don't match!");
     };
@@ -108,8 +108,20 @@ Matrix Matrix::operator*(Matrix m2)
     return output;
 }
 
+std::vector<double> Matrix::operator*(std::vector<double> vec) {
+    if (this->columns != vec.size()) {
+        throw std::invalid_argument("Invalid dimensions for matrix multiplication");
+    }
+    std::vector<double> result(this->rows, 0);
 
-std::ostream& operator<<(std::ostream& os, Matrix& matrix) {
+    for (int i = 0; i < this->rows; i++) {
+        result[i] = dot_product((*this)[i], vec);
+    }
+    return result;
+}
+
+
+std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
     for (const auto& row : matrix.matrix) {
         for (double val : row) {
             os << val << " ";
