@@ -28,11 +28,14 @@ public:
     // matrix mult for matrix * vector
     std::vector<double> operator*(std::vector<double> vec);
 
+
+
     // Matrix addition
     Matrix operator+(Matrix m2);
 
     // Non-const version (allows modification)
     std::vector<double>& operator[](size_t index);
+
 
 
     friend std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
