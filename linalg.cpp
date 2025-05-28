@@ -54,9 +54,9 @@ Matrix Matrix::transposed() {
 
 Matrix Matrix::operator+(Matrix m2){
     if (this->rows != m2.rows || this->columns != m2.columns) {
-        throw std::invalid_argument("Matrix dimensions must match for subtraction");
+        throw std::invalid_argument("Matrix dimensions must match for addition");
     }
-    std::vector<std::vector<double>> matrix_result(this->rows, std::vector<double>(m2.rows));
+    std::vector<std::vector<double>> matrix_result(this->rows, std::vector<double>(m2.columns));
     for (int i = 0; i < this->rows; i++) {
         for (int j = 0; j < m2.rows; j++) {
             matrix_result[i][j] = this->matrix[i][j] + m2[i][j];
@@ -67,7 +67,8 @@ Matrix Matrix::operator+(Matrix m2){
 
 };
 
-Matrix Hadamard(Matrix m1, Matrix m2){
+
+Matrix Matrix::Hadamard(Matrix m1, Matrix m2){
     if(m1.columns != m2.columns){
         throw std::invalid_argument("Dimensoins in columns don't match!");
     };
@@ -75,7 +76,7 @@ Matrix Hadamard(Matrix m1, Matrix m2){
     if(m1.rows != m2.rows){
         throw std::invalid_argument("Dimensoins in rows don't match!");
     };
-    std::vector<std::vector<double>> result(m1.rows, std::vector<double>(m2.columns));
+    std::vector<std::vector<double>> result(this->rows, std::vector<double>(m2.columns));
     
     for(int i = 0; i < m1.rows; i++){
         for(int j = 0; j < m1.columns; j++){
