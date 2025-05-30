@@ -13,6 +13,9 @@ Layer::Layer(int neuron_amount, int prev_neuron_amount, bool first, std::string 
     if (activation_function == "relu") {
         this->activation_function = relu;
     }
+    else if (activation_function == "softmax") {
+        this->activation_function = softmax;
+    }
     
     int weight_rows = neuron_amount;
     int weight_columns = prev_neuron_amount;
