@@ -37,18 +37,27 @@ void Layer::activate(std::vector<double> activation_vector) {
         throw std::invalid_argument("Vector doesn't match neuron amount");
     }
 
-    for (int i = 0; i < activation_vector.size(); i++) {
-        activation_vector[i] = this->activation_function(activation_vector[i]);
-    }
-    this->activation = activation_vector;
+    this->activation = this->activation_function(activation_vector);
 }
 
 
-double Layer::relu(double x) {
-    if (x < 0) {
-        return 0;
+std::vector<double> Layer::relu(std::vector<double> vec) {
+    for (int i = 0; i < vec.size(); i++) {
+        if (vec[i] < 0) {
+            vec[i] = 0;
+        }
     }
-    else {
-        return x;
+    return vec;
+}
+
+
+std::vector<double> Layer::softmax(std::vector<double> vec) {
+    double vec_sum = 0;
+    for (int i = 0; i < vec.size(); i++) {
+        vec_sum += vec[i];
     }
+    for (int i = 0; i < vec.size(); i++) {
+        vec[i] = vec[i] / vec_sum;
+    }
+    return vec;
 }
