@@ -10,20 +10,23 @@ double dot_product(std::vector<double> v1, std::vector<double> v2) {
     }
 
     double product = 0;
-    for (int i = 0; i < v1.size(); i++) {
+    for (int i = 0; i < (int) v1.size(); i++) {
         product += v1[i] * v2[i];
     }
     return product;
 }
 
+Matrix::Matrix() {
+    return;
+}
 
 Matrix::Matrix(int r, int c, std::vector<std::vector<double>> data) {
     // These checks could be omitted for performance
-    if (data.size() != r) {
+    if ((int) data.size() != r) {
         throw std::invalid_argument("Matrix :: Dimensions of the data passed in don't match dimensions passed"); 
     } 
     for (std::vector<double> row: data) {
-        if (row.size() != c) {
+        if ((int) row.size() != c) {
             throw std::invalid_argument("Matrix :: Dimensions of the data passed in don't match dimensions passed columns"); 
         } 
     }
@@ -75,7 +78,7 @@ Matrix hadamard(Matrix m1, Matrix m2){
     if(m1.rows != m2.rows){
         throw std::invalid_argument("Dimensoins in rows don't match!");
     };
-    std::vector<std::vector<double>> result(this->rows, std::vector<double>(m2.columns));
+    std::vector<std::vector<double>> result(m2.rows, std::vector<double>(m2.columns));
     
     for(int i = 0; i < m1.rows; i++){
         for(int j = 0; j < m1.columns; j++){
@@ -109,7 +112,7 @@ Matrix Matrix::operator*(Matrix m2)
 }
 
 std::vector<double> Matrix::operator*(std::vector<double> vec) {
-    if (this->columns != vec.size()) {
+    if (this->columns != (int) vec.size()) {
         throw std::invalid_argument("Invalid dimensions for matrix multiplication");
     }
     std::vector<double> result(this->rows, 0);

@@ -18,6 +18,7 @@ public:
 
     // Constructor to initialize the matrix
     Matrix(int r, int c, std::vector<std::vector<double>> data);
+    Matrix();
 
     // Transpose method that returns a new transposed matrix
     Matrix transposed();
