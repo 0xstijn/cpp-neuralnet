@@ -8,6 +8,7 @@
 
 // Function to calculate dot product of two vectors
 double dot_product(std::vector<double> v1, std::vector<double> v2);
+std::vector<double> add_vectors(std::vector<double> v1, std::vector<double> v2);
 
 
 // Matrix class

@@ -16,6 +16,19 @@ double dot_product(std::vector<double> v1, std::vector<double> v2) {
     return product;
 }
 
+std::vector<double> add_vectors(std::vector<double> v1, std::vector<double> v2) {
+    if (v1.size() != v2.size()) {
+        throw std::invalid_argument("Can only calculate addition of vectors of same size");
+    }
+
+    std::vector<double> addition(v1.size());
+
+    for (int i = 0; i < (int) v1.size(); i++) {
+        addition[i] = v1[i] + v2[i];
+    }
+    return addition;
+}
+
 Matrix::Matrix() {
     return;
 }

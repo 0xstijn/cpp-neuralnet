@@ -6,13 +6,14 @@
 #include <vector>
 
 Layer::Layer(int neuron_amount, int prev_neuron_amount, std::string activation_function, bool first) {
-    if (first) {
-        return;
-    }
     if (neuron_amount < 1) {
         throw std::invalid_argument("Layer cannot have less then 1 neuron");
     }
     this->neuron_amount = neuron_amount;
+
+    if (first) {
+        return;
+    }
 
     // More activation functions here :)
     if (activation_function == "relu") {
@@ -84,8 +85,12 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
     int prev_neuron_amount;
     for (int i = 0; i < (int) dimensions.size(); i++) {
         bool first = i == 0;
+        bool last = i == (int) dimensions.size() - 1;
         if (first) {
             layers.emplace_back(dimensions[i], 0, "", first);
+        }
+        else if (last) {
+            layers.emplace_back(dimensions[i], prev_neuron_amount, "softmax", first);
         }
         else {
             layers.emplace_back(dimensions[i], prev_neuron_amount, activation_function, first);
@@ -101,6 +106,26 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
     else {
         throw std::invalid_argument("Invalid loss functions for model");
     }
+}
+
+
+std::vector<double> Model::forward(std::vector<double> input) {
+    Layer first_layer = this->layers[0];
+    std::cout << input.size() << std::endl << first_layer.neuron_amount;
+    if ((int) input.size() != first_layer.neuron_amount) {
+        throw std::invalid_argument("input doesnt match first layer dimension");
+    }
+
+    int layer_amount = this->layers.size();
+    std::vector<double> previous_activation = input;
+
+    for (int i = 1; i < layer_amount; i++) {
+        Layer current_layer = this->layers[i];
+        std::vector<double> next = add_vectors(current_layer.weights * previous_activation, current_layer.biases);
+        current_layer.activate(next);
+        previous_activation = current_layer.activation;
+    }
+    return previous_activation;
 }
 
 

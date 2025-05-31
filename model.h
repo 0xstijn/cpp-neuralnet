@@ -29,7 +29,7 @@ public:
 
     // Dimensions is signifies how many vectors there are in each layer. Example: {3, 2, 4}
     Model(std::vector<int> dimensions, std::string activation_function, std::string loss_function);
-    std::vector<double> forward();
+    std::vector<double> forward(std::vector<double> input);
 private:
     static double categorical_cross_entropy_loss(std::vector<double> prediction, std::vector<double> target, double epsilon = 0.0000001);
 };
