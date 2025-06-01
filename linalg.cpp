@@ -119,7 +119,6 @@ Matrix Matrix::operator*(Matrix m2)
         } 
     }
 
-    std::cout << this->columns << m2.rows << std::endl;    
     Matrix output = Matrix(this->rows, m2.columns, matrix_data);
     return output;
 }

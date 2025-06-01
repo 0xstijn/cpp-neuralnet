@@ -97,7 +97,6 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
             layers.emplace_back(dimensions[i], 0, "", first);
         }
         else if (last) {
-            std::cout<<"YAAAAA\n";
             layers.emplace_back(dimensions[i], prev_neuron_amount, "softmax", first);
         }
         else {
@@ -119,7 +118,6 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
 
 std::vector<double> Model::forward(std::vector<double> input) {
     Layer first_layer = this->layers[0];
-    std::cout << input.size() << std::endl << first_layer.neuron_amount;
     if ((int) input.size() != first_layer.neuron_amount) {
         throw std::invalid_argument("input doesnt match first layer dimension");
     }

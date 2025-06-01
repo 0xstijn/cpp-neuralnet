@@ -9,6 +9,15 @@ int main() {
         std::cout << result[i] << " ";
     }
     std::cout << std::endl;
+    result = model.forward({200, 60, 100, 0, 0});
+    for (int i = 0; i < (int) result.size(); i++) {
+        std::cout << result[i] << " ";
+    }
+    std::cout << std::endl;
+    result = model.forward({0, 10, 22, 2, 4});
+    for (int i = 0; i < (int) result.size(); i++) {
+        std::cout << result[i] << " ";
+    }
     std::cout << "HAHAHAHAHAH HAHAHAHAHAHAH HAHAHAH";
     return 0;
 }
