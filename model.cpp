@@ -64,12 +64,19 @@ std::vector<double> Layer::relu(std::vector<double> vec) {
 
 
 std::vector<double> Layer::softmax(std::vector<double> vec) {
+    double max = 0;
+    for (int i = 0; i < (int) vec.size(); i++) {
+        if (vec[i] > max) {
+            max = vec[i];
+        }
+    }
     double vec_sum = 0;
     for (int i = 0; i < (int) vec.size(); i++) {
-        vec_sum += vec[i];
+        vec[i] -= max;
+        vec_sum += std::exp(vec[i]);
     }
     for (int i = 0; i < (int) vec.size(); i++) {
-        vec[i] = vec[i] / vec_sum;
+        vec[i] = std::exp(vec[i]) / vec_sum;
     }
     return vec;
 }
@@ -90,6 +97,7 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
             layers.emplace_back(dimensions[i], 0, "", first);
         }
         else if (last) {
+            std::cout<<"YAAAAA\n";
             layers.emplace_back(dimensions[i], prev_neuron_amount, "softmax", first);
         }
         else {
