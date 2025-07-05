@@ -86,6 +86,7 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
     if ((int) dimensions.size() < 3) {
         throw std::invalid_argument("Model must have at least 3 layers");
     }
+    this->dimensions = dimensions;
 
     std::vector<Layer> layers;
 

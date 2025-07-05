@@ -24,12 +24,15 @@ class Model {
 public:
     std::vector<Layer> layers;
     std::string activation_function;
+    std::vector<int> dimensions;
 
     double (*loss_function)(std::vector<double>, std::vector<double>, double);
 
     // Dimensions is signifies how many vectors there are in each layer. Example: {3, 2, 4}
     Model(std::vector<int> dimensions, std::string activation_function, std::string loss_function);
     std::vector<double> forward(std::vector<double> input);
+
+    void save(std::string filename);
 private:
     static double categorical_cross_entropy_loss(std::vector<double> prediction, std::vector<double> target, double epsilon = 0.0000001);
 };
