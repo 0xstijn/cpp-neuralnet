@@ -91,7 +91,6 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
 
     int prev_neuron_amount;
     if (layers.size() == 0) {
-        std::cout<<"ALS JE DIT ZIET IS STIJN KKR DOM\n";
         for (int i = 0; i < (int) dimensions.size(); i++) {
             bool first = i == 0;
             bool last = i == (int) dimensions.size() - 1;
