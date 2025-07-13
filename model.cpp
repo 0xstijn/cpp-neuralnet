@@ -1,5 +1,5 @@
 #include "linalg.h"
-#include "model.h"
+#include "model.hpp"
 #include "utils.h"
 #include <cmath>
 #include <iostream>
@@ -82,28 +82,33 @@ std::vector<double> Layer::softmax(std::vector<double> vec) {
 }
 
 
-Model::Model(std::vector<int> dimensions, std::string activation_function, std::string loss_function) {
+Model::Model(std::vector<int> dimensions, std::string activation_function, std::string loss_function, std::vector<Layer> layers) {
     if ((int) dimensions.size() < 3) {
         throw std::invalid_argument("Model must have at least 3 layers");
     }
     this->dimensions = dimensions;
 
-    std::vector<Layer> layers;
 
     int prev_neuron_amount;
-    for (int i = 0; i < (int) dimensions.size(); i++) {
-        bool first = i == 0;
-        bool last = i == (int) dimensions.size() - 1;
-        if (first) {
-            layers.emplace_back(dimensions[i], 0, "", first);
+    if (layers.size() == 0) {
+        std::cout<<"ALS JE DIT ZIET IS STIJN KKR DOM\n";
+        for (int i = 0; i < (int) dimensions.size(); i++) {
+            bool first = i == 0;
+            bool last = i == (int) dimensions.size() - 1;
+            if (first) {
+                layers.emplace_back(dimensions[i], 0, "", first);
+            }
+            else if (last) {
+                layers.emplace_back(dimensions[i], prev_neuron_amount, "softmax", first);
+            }
+            else {
+                layers.emplace_back(dimensions[i], prev_neuron_amount, activation_function, first);
+            }
+            prev_neuron_amount = dimensions[i];
         }
-        else if (last) {
-            layers.emplace_back(dimensions[i], prev_neuron_amount, "softmax", first);
-        }
-        else {
-            layers.emplace_back(dimensions[i], prev_neuron_amount, activation_function, first);
-        }
-        prev_neuron_amount = dimensions[i];
+    }
+    else if (layers.size() != dimensions.size()) {
+        throw std::invalid_argument("Layers and dimensions must match");
     }
     this->layers = layers;
     this->activation_function = activation_function;
