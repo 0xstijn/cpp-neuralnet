@@ -145,8 +145,19 @@ double Model::categorical_cross_entropy_loss(std::vector<double> prediction, std
         throw std::invalid_argument("Prediction dimensions don't match target dimensions");
     }
     double loss = 0;
-    for (int i = 0; i < (int) prediction.size(); i++) {
+    for (size_t i = 0; i < prediction.size(); i++) {
         loss += -(log(prediction[i] + epsilon) * target[i]);
     }
     return loss;
+}
+
+std::vector<double> Model::categorical_cross_entropy_loss_gradient(const std::vector<double> prediction, const std::vector<double> target) {
+    if (prediction.size() != target.size()) {
+        throw std::invalid_argument("Prediction dimensions don't match target dimensions");
+    }
+    std::vector<double> gradient(prediction.size());
+    for (size_t i = 0; i < prediction.size(); i++) {
+        gradient[i] = prediction[i] - target[i];
+    }
+    return gradient;
 }
