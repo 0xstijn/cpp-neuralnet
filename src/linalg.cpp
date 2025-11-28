@@ -163,3 +163,17 @@ std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
     }
     return os;
 }
+
+Matrix v_times_vt(const std::vector<double>& v1, const std::vector<double>& v2) {
+    std::vector<std::vector<double>> result(
+        v1.size(),
+        std::vector<double>(v2.size())
+    );
+
+    for (size_t i = 0; i < v1.size(); i++) {
+        for (size_t j = 0; j < v2.size(); j++) {
+            result[i][j] = v1[i] * v2[j];
+        }
+    }
+    return result;
+}

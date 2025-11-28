@@ -45,7 +45,6 @@ public:
     const std::vector<double>& operator[](size_t index) const;
 
 
-
     friend std::ostream& operator<<(std::ostream& os, const Matrix& matrix);
 
 private:
@@ -53,5 +52,7 @@ private:
 };
 
 Matrix hadamard(const Matrix& m1, const Matrix& m2);
+
+Matrix v_times_vt(const std::vector<double>& v1, const std::vector<double>& v2);
 
 #endif // LINALG_H
