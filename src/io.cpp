@@ -3,27 +3,27 @@
 #include <iostream>
 #include <fstream>
 
-std::vector<double> parse_line(std::string line);
+std::vector<double> parse_line(const std::string& line);
 
-void Model::save(std::string filename) {
+void Model::save(const std::string& filename) {
     std::ofstream file(filename);
     if (!file) {
         throw std::runtime_error("Could not open file for saving model");
     }
 
     file << "LAYERS\n";
-    std::vector<int> dimensions = this->dimensions;
-    for (int i = 0; i < (int) dimensions.size(); i++) {
+    const std::vector<int>& dimensions = this->dimensions;
+    for (size_t i = 0; i < dimensions.size(); i++) {
         file << dimensions[i] << "\n";
     }
     file << "ENDLAYERS\n";
 
-    for (int i = 1; i < (int) dimensions.size(); i++) {
+    for (size_t i = 1; i < dimensions.size(); i++) {
         file << "LAYER\n";
         file << "W\n" << this->layers[i].weights;
         file << "B\n";
-        std::vector<double> biases = this->layers[i].biases;
-        for (int j = 0; j < (int) biases.size(); j++) {
+        const std::vector<double>& biases = this->layers[i].biases;
+        for (size_t j = 0; j < biases.size(); j++) {
             file << biases[j] << " ";
         }
         file << "\n";
@@ -31,7 +31,7 @@ void Model::save(std::string filename) {
     file << "END";
 }
 
-Model Model::init_from_file(std::string filename) {
+Model Model::init_from_file(const std::string& filename) {
     std::ifstream infile(filename);
 
     if (!infile) {
@@ -92,11 +92,11 @@ Model Model::init_from_file(std::string filename) {
 
 }
 
-std::vector<double> parse_line(std::string line) {
+std::vector<double> parse_line(const std::string& line) {
     std::vector<double> parsed = {};
     std::string number_string = "";
     double number;
-    for (int i = 0; i < (int) line.size(); i++) {
+    for (size_t i = 0; i < line.size(); i++) {
 	    if (line[i] == ' ') {
             number = std::stod(number_string);
             parsed.push_back(number);

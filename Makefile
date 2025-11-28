@@ -6,7 +6,7 @@ CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 TARGET = test_model
 
 # Source files
-SRCS = test.cpp model.cpp io.cpp linalg.cpp utils.cpp
+SRCS = src/test.cpp src/model.cpp src/io.cpp src/linalg.cpp src/utils.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 # Default target

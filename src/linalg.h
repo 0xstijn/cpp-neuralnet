@@ -7,8 +7,8 @@
 #include <vector>
 
 // Function to calculate dot product of two vectors
-double dot_product(std::vector<double> v1, std::vector<double> v2);
-std::vector<double> add_vectors(std::vector<double> v1, std::vector<double> v2);
+double dot_product(const std::vector<double>& v1, const std::vector<double>& v2);
+std::vector<double> add_vectors(const std::vector<double>& v1, const std::vector<double>& v2);
 
 
 // Matrix class
@@ -18,25 +18,28 @@ public:
     int columns;
 
     // Constructor to initialize the matrix
-    Matrix(int r, int c, std::vector<std::vector<double>> data);
+    Matrix(int r, int c, const std::vector<std::vector<double>>& data);
     Matrix();
 
     // Transpose method that returns a new transposed matrix
-    Matrix transposed();
+    Matrix transposed() const;
 
     // Matrix multiplication operator
-    Matrix operator*(Matrix m2);
+    Matrix operator*(const Matrix& m2);
 
     // matrix mult for matrix * vector
-    std::vector<double> operator*(std::vector<double> vec);
+    std::vector<double> operator*(const std::vector<double>& vec);
 
 
 
     // Matrix addition
-    Matrix operator+(Matrix m2);
+    Matrix operator+(const Matrix& m2);
 
     // Non-const version (allows modification)
     std::vector<double>& operator[](size_t index);
+
+    // Const version (read-only)
+    const std::vector<double>& operator[](size_t index) const;
 
 
 
@@ -46,6 +49,6 @@ private:
     std::vector<std::vector<double>> matrix;
 };
 
-Matrix hadamard(Matrix m1, Matrix m2);
+Matrix hadamard(const Matrix& m1, const Matrix& m2);
 
 #endif // LINALG_H

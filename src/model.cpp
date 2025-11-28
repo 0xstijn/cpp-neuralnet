@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-Layer::Layer(int neuron_amount, int prev_neuron_amount, std::string activation_function, bool first) {
+Layer::Layer(int neuron_amount, int prev_neuron_amount, const std::string& activation_function, bool first) {
     if (neuron_amount < 1) {
         throw std::invalid_argument("Layer cannot have less then 1 neuron");
     }
@@ -44,7 +44,7 @@ Layer::Layer(int neuron_amount, int prev_neuron_amount, std::string activation_f
     this->biases = biases;
 }
 
-void Layer::activate(std::vector<double> activation_vector) {
+void Layer::activate(const std::vector<double>& activation_vector) {
     if ((int) activation_vector.size() != this->neuron_amount) {
         throw std::invalid_argument("Vector doesn't match neuron amount");
     }
@@ -53,63 +53,66 @@ void Layer::activate(std::vector<double> activation_vector) {
 }
 
 
-std::vector<double> Layer::relu(std::vector<double> vec) {
-    for (int i = 0; i < (int) vec.size(); i++) {
-        if (vec[i] < 0) {
-            vec[i] = 0;
+std::vector<double> Layer::relu(const std::vector<double>& vec) {
+    std::vector<double> result = vec;
+    for (size_t i = 0; i < result.size(); i++) {
+        if (result[i] < 0) {
+            result[i] = 0;
         }
     }
-    return vec;
+    return result;
 }
 
 
-std::vector<double> Layer::softmax(std::vector<double> vec) {
-    double max = 0;
-    for (int i = 0; i < (int) vec.size(); i++) {
-        if (vec[i] > max) {
-            max = vec[i];
+std::vector<double> Layer::softmax(const std::vector<double>& vec) {
+    std::vector<double> result = vec;
+    double max = result[0];
+    for (size_t i = 1; i < result.size(); i++) {
+        if (result[i] > max) {
+            max = result[i];
         }
     }
     double vec_sum = 0;
-    for (int i = 0; i < (int) vec.size(); i++) {
-        vec[i] -= max;
-        vec_sum += std::exp(vec[i]);
+    for (size_t i = 0; i < result.size(); i++) {
+        result[i] -= max;
+        vec_sum += std::exp(result[i]);
     }
-    for (int i = 0; i < (int) vec.size(); i++) {
-        vec[i] = std::exp(vec[i]) / vec_sum;
+    for (size_t i = 0; i < result.size(); i++) {
+        result[i] = std::exp(result[i]) / vec_sum;
     }
-    return vec;
+    return result;
 }
 
 
-Model::Model(std::vector<int> dimensions, std::string activation_function, std::string loss_function, std::vector<Layer> layers) {
-    if ((int) dimensions.size() < 3) {
+Model::Model(const std::vector<int>& dimensions, const std::string& activation_function, const std::string& loss_function, const std::vector<Layer>& layers) {
+    if (dimensions.size() < 3) {
         throw std::invalid_argument("Model must have at least 3 layers");
     }
     this->dimensions = dimensions;
 
 
-    int prev_neuron_amount;
-    if (layers.size() == 0) {
-        for (int i = 0; i < (int) dimensions.size(); i++) {
+    int prev_neuron_amount = 0;
+    std::vector<Layer> model_layers = layers;
+    if (model_layers.size() == 0) {
+        for (size_t i = 0; i < dimensions.size(); i++) {
             bool first = i == 0;
-            bool last = i == (int) dimensions.size() - 1;
+            bool last = i == dimensions.size() - 1;
             if (first) {
-                layers.emplace_back(dimensions[i], 0, "", first);
+                model_layers.emplace_back(dimensions[i], 0, "", first);
             }
             else if (last) {
-                layers.emplace_back(dimensions[i], prev_neuron_amount, "softmax", first);
+                model_layers.emplace_back(dimensions[i], prev_neuron_amount, "softmax", first);
             }
             else {
-                layers.emplace_back(dimensions[i], prev_neuron_amount, activation_function, first);
+                model_layers.emplace_back(dimensions[i], prev_neuron_amount, activation_function, first);
             }
             prev_neuron_amount = dimensions[i];
         }
     }
-    else if (layers.size() != dimensions.size()) {
+    else if (model_layers.size() != dimensions.size()) {
         throw std::invalid_argument("Layers and dimensions must match");
     }
-    this->layers = layers;
+    this->layers = model_layers;
     this->activation_function = activation_function;
 
     if (loss_function == "categorical_cross_entropy_loss") {
@@ -121,17 +124,17 @@ Model::Model(std::vector<int> dimensions, std::string activation_function, std::
 }
 
 
-std::vector<double> Model::forward(std::vector<double> input) {
-    Layer first_layer = this->layers[0];
+std::vector<double> Model::forward(const std::vector<double>& input) {
+    const Layer& first_layer = this->layers[0];
     if ((int) input.size() != first_layer.neuron_amount) {
         throw std::invalid_argument("input doesnt match first layer dimension");
     }
 
-    int layer_amount = this->layers.size();
+    size_t layer_amount = this->layers.size();
     std::vector<double> previous_activation = input;
 
-    for (int i = 1; i < layer_amount; i++) {
-        Layer current_layer = this->layers[i];
+    for (size_t i = 1; i < layer_amount; i++) {
+        Layer& current_layer = this->layers[i];
         std::vector<double> next = add_vectors(current_layer.weights * previous_activation, current_layer.biases);
         current_layer.activate(next);
         previous_activation = current_layer.activation;
@@ -140,7 +143,7 @@ std::vector<double> Model::forward(std::vector<double> input) {
 }
 
 
-double Model::categorical_cross_entropy_loss(std::vector<double> prediction, std::vector<double> target, double epsilon) {
+double Model::categorical_cross_entropy_loss(const std::vector<double>& prediction, const std::vector<double>& target, double epsilon) {
     if (prediction.size() != target.size()) {
         throw std::invalid_argument("Prediction dimensions don't match target dimensions");
     }
@@ -151,7 +154,7 @@ double Model::categorical_cross_entropy_loss(std::vector<double> prediction, std
     return loss;
 }
 
-std::vector<double> Model::categorical_cross_entropy_loss_gradient(const std::vector<double> prediction, const std::vector<double> target) {
+std::vector<double> Model::categorical_cross_entropy_loss_gradient(const std::vector<double>& prediction, const std::vector<double>& target) {
     if (prediction.size() != target.size()) {
         throw std::invalid_argument("Prediction dimensions don't match target dimensions");
     }
