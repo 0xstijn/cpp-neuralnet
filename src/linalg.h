@@ -35,6 +35,9 @@ public:
     // Matrix addition
     Matrix operator+(const Matrix& m2);
 
+    // Matrix subtraction
+    Matrix operator-(const Matrix& m2);
+
     // Non-const version (allows modification)
     std::vector<double>& operator[](size_t index);
 

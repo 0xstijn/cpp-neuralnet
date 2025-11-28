@@ -49,6 +49,7 @@ void Layer::activate(const std::vector<double>& activation_vector) {
         throw std::invalid_argument("Vector doesn't match neuron amount");
     }
 
+    this->pre_activation = activation_vector;
     this->activation = this->activation_function(activation_vector);
 }
 
@@ -58,6 +59,19 @@ std::vector<double> Layer::relu(const std::vector<double>& vec) {
     for (size_t i = 0; i < result.size(); i++) {
         if (result[i] < 0) {
             result[i] = 0;
+        }
+    }
+    return result;
+}
+    
+static std::vector<double> relu_der(const std::vector<double>& vec) {
+    std::vector<double> result = vec;
+    for (size_t i = 0; i < result.size(); i++) {
+        if (result[i] <= 0) {
+            result[i] = 0;
+        }
+        else {
+            result[i] = 1;
         }
     }
     return result;

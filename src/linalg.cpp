@@ -85,7 +85,20 @@ Matrix Matrix::operator+(const Matrix& m2){
     }
     Matrix result_matrix_object =  Matrix(this->rows, this->columns, matrix_result);
     return result_matrix_object;
+};
 
+Matrix Matrix::operator-(const Matrix& m2){
+    if (this->rows != m2.rows || this->columns != m2.columns) {
+        throw std::invalid_argument("Matrix dimensions must match for subtraction");
+    }
+    std::vector<std::vector<double>> matrix_result(this->rows, std::vector<double>(m2.columns));
+    for (int i = 0; i < this->rows; i++) {
+        for (int j = 0; j < this->columns; j++) {
+            matrix_result[i][j] = (*this)[i][j] - m2[i][j];
+        }
+    }
+    Matrix result_matrix_object =  Matrix(this->rows, this->columns, matrix_result);
+    return result_matrix_object;
 };
 
 Matrix hadamard(const Matrix& m1, const Matrix& m2){

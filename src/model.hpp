@@ -16,11 +16,13 @@ public:
     std::vector<double> (*activation_function)(const std::vector<double>&);
     std::vector<double> biases;
     std::vector<double> activation;
+    std::vector<double> pre_activation;
 
     Layer(int neuron_amount, int prev_neuron_amount, const std::string& activation_function, bool first);
     void activate(const std::vector<double>& activation_vector);
 private:
     static std::vector<double> relu(const std::vector<double>& vec);
+    static std::vector<double> relu_der(const std::vector<double>& vec);
     static std::vector<double> softmax(const std::vector<double>& vec);
 };
 
